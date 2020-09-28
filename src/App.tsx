@@ -1,24 +1,39 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import List from './components/List'
 
-function App() {
+
+type ExampleCard = {
+  id: string,
+  title: string,
+  content: string
+}
+
+type AppProps ={
+  store: {
+    lists: 
+      {
+        id: string, 
+        header: string,
+        cardIds: string[] 
+      }[],
+    allCards: {
+        [id: string]:ExampleCard
+    }
+  }
+}
+
+const App: React.FC<AppProps> =(props) =>{
+  let listOfLists = props.store.lists.map(singleList => <List key={singleList.id} header={singleList.header} cards={singleList.cardIds.map(id => props.store.allCards[id])}></List>)
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <header className='App-header'>
+          <h1>Trelloyes!</h1>
+        </header>
+        <div className='App-list'>
+          {listOfLists}
+        </div>
     </div>
   );
 }
